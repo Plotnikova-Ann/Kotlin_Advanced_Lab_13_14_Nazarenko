@@ -1,5 +1,17 @@
+interface ProgressPrintable {
+    val progressText: String
+}
 
-class Quiz {
+class Quiz: ProgressPrintable {
+    override val progressText: String
+        get() = "${answered} of ${total} answered"
+
+    fun printProgressBar() {
+        repeat(Quiz.answered) { print("") }
+        repeat(Quiz.total - Quiz.answered) { print(" ") }
+        println()
+        println(progressText)
+    }
 
     val question1 = Question<String>(
         "Речка спятила с ума По домам пошла сама. ___",
