@@ -1,30 +1,93 @@
-fun displayMessage(mes: () -> Unit) {
-    mes()
-}
+data class Cookie(
+    val name: String,
+    val softBaked: Boolean,
+    val hasFilling: Boolean,
+    val price: Double
+)
 
-fun morning() {
-    println("Good morning!")
-}
-
-fun action(a: Int, b: Int, operation: (Int, Int) -> Int) {
-    println(operation(a, b))
-}
-
-fun sum(a: Int, b: Int) = a + b
-fun multiply(a: Int, b: Int) = a * b
-fun subtract(a: Int, b: Int) = a - b
-
-fun selectAction(key: Int): (Int, Int) -> Int {
-    return when (key) {
-        1 -> ::sum
-        2 -> ::multiply
-        else -> ::subtract
-    }
-}
+val cookies = listOf(
+    Cookie(
+        name = "Печенье с шоколадом",
+        softBaked = false,
+        hasFilling = false,
+        price = 1.69
+    ),
+    Cookie(
+        name = "Ванильный крем",
+        softBaked = false,
+        hasFilling = true,
+        price = 1.59
+    ),
+    Cookie(
+        name = "Шоколадно-арахисовое масло",
+        softBaked = false,
+        hasFilling = false,
+        price = 1.49
+    ),
+    Cookie(
+        name = "Нуга ореховая",
+        softBaked = true,
+        hasFilling = false,
+        price = 1.49
+    ),
+    Cookie(
+        name = "Сникерс",
+        softBaked = true,
+        hasFilling = true,
+        price = 1.39
+    ),
+    Cookie(
+        name = "Черничный пирог",
+        softBaked = true,
+        hasFilling = false,
+        price = 1.79
+    ),
+    Cookie(
+        name = "Сахар и посыпка",
+        softBaked = false,
+        hasFilling = false,
+        price = 1.39
+    )
+)
 
 fun main() {
-    displayMessage(::morning)
-    action(5, 3, ::sum)
-    val action1 = selectAction(1)
-    println(action1(10, 5))
+    cookies.forEach {
+        println("${it.name} - $${it.price}")
+    }
+    println()
+    val menuItems = cookies.map {
+        "${it.name} - $${"%.2f".format(it.price)}"
+    }
+    menuItems.forEach { println(it) }
+    println()
+    val softCookies = cookies.filter { it.softBaked }
+    println("Мягкое печенье:")
+    softCookies.forEach {
+        println("  ${it.name} - $${it.price}")
+    }
+    println()
+    val groupedMenu = cookies.groupBy { it.softBaked }
+    val softBakedMenu = groupedMenu[true] ?: emptyList()
+    val crunchyMenu = groupedMenu[false] ?: emptyList()
+    println("Soft cookies:")
+    softBakedMenu.forEach {
+        println("  ${it.name} - $${it.price}")
+    }
+    println("\nCrunchy cookies:")
+    crunchyMenu.forEach {
+        println("  ${it.name} - $${it.price}")
+    }
+
+    val totalPrice = cookies.fold(0.0) { total, cookie ->
+        total + cookie.price
+    }
+    println("Total price: $${"%.2f".format(totalPrice)}")
+
+    println("Меню в алфавитном порядке:")
+    val alphabeticalMenu = cookies.sortedBy { it.name }
+    alphabeticalMenu.forEach {
+        println(it.name)
+    }
+    println()
+
 }
